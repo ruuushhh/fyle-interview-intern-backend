@@ -41,6 +41,25 @@ def test_post_assignment_student_1(client, h_student_1):
     assert data['state'] == 'DRAFT'
     assert data['teacher_id'] is None
 
+def test_grade_assignment_draft_assignment(client, h_teacher_2):
+    """
+    failure case: only a submitted assignment can be graded
+    """
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_2
+        , json={
+            "id": 2,
+            "grade": "A"
+        }
+    )
+
+    assert response.status_code == 400
+    data = response.json
+
+    assert data['error'] == 'FyleError'
+    assert data["message"] == 'only a submitted assignment can be graded'
+
 
 def test_submit_assignment_student_1(client, h_student_1):
     response = client.post(

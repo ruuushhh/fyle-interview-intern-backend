@@ -1,4 +1,5 @@
 from .exceptions import FyleError
+from marshmallow import ValidationError
 
 
 def base_assert(error_code, msg):
@@ -23,3 +24,7 @@ def assert_valid(cond, msg='BAD_REQUEST'):
 def assert_found(_obj, msg='NOT_FOUND'):
     if _obj is None:
         base_assert(404, msg)
+
+def assert_data(cond, msg="Validation_ERROR"):
+    if cond is False:
+        raise ValidationError(msg)
